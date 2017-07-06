@@ -5,7 +5,7 @@
  * @license http://www.digitaldeals.cz/license/
  */
 
-namespace dlds\metronic\bundles;
+namespace isrba\metronic\bundles;
 
 /**
  * DateRangePickerAsset for dateRangePicker widget.
@@ -22,7 +22,7 @@ class DateRangePickerAsset extends BaseAssetBundle {
         'plugins/bootstrap-datetimepicker/css/datetimepicker.css',
     ];
     public $depends = [
-        'dlds\metronic\bundles\CoreAsset',
+        'isrba\metronic\bundles\CoreAsset',
     ];
 
 }

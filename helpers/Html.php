@@ -7,9 +7,9 @@
 
 namespace yii\helpers;
 
-use dlds\metronic\traits\HtmlTrait;
+use isrba\metronic\traits\HtmlTrait;
 use yii\helpers\ArrayHelper;
-use dlds\metronic\bundles\Select2Asset;
+use isrba\metronic\bundles\Select2Asset;
 
 /**
  * Html helper

@@ -10,7 +10,7 @@ The extension is in development and the only way to use this fork is through thr
 
 So add it to your composer.json with this composer command:
 ```
-php composer.phar require dlds/yii2-metronic dev-master
+php composer.phar require isrba/yii2-metronic dev-master
 ```
 
  
@@ -36,15 +36,15 @@ Edit your ```config/web.php``` configuration file and add the metronic component
 ```
 'components' => [
     'metronic'=>[
-        'class'=>'dlds\metronic\Metronic',
+        'class'=>'isrba\metronic\Metronic',
         'resources'=>'[path to my web]/web/metronic/assets/theme/assets',
-        'style'=>\dlds\metronic\Metronic::STYLE_MATERIAL,
-        'theme'=>\dlds\metronic\Metronic::THEME_LIGHT,
-        'layoutOption'=>\dlds\metronic\Metronic::LAYOUT_FLUID,
-        'headerOption'=>\dlds\metronic\Metronic::HEADER_FIXED,
-        'sidebarPosition'=>\dlds\metronic\Metronic::SIDEBAR_POSITION_LEFT,
-        'sidebarOption'=>\dlds\metronic\Metronic::SIDEBAR_MENU_ACCORDION,
-        'footerOption'=>\dlds\metronic\Metronic::FOOTER_FIXED,
+        'style'=>\isrba\metronic\Metronic::STYLE_MATERIAL,
+        'theme'=>\isrba\metronic\Metronic::THEME_LIGHT,
+        'layoutOption'=>\isrba\metronic\Metronic::LAYOUT_FLUID,
+        'headerOption'=>\isrba\metronic\Metronic::HEADER_FIXED,
+        'sidebarPosition'=>\isrba\metronic\Metronic::SIDEBAR_POSITION_LEFT,
+        'sidebarOption'=>\isrba\metronic\Metronic::SIDEBAR_MENU_ACCORDION,
+        'footerOption'=>\isrba\metronic\Metronic::FOOTER_FIXED,
 
     ],
 ]
@@ -60,7 +60,7 @@ My vendor folder looks like this:
 * app/
     * [...]
     * vendor/
-        * dlds/
+        * isrba/
             * yii2-metronic/
                 * assets -> symlink to /var/www/project/web/metronic/assets/theme/assets
                 * builders/
@@ -82,7 +82,7 @@ I suggest also to configure the assetManager. My actual configuration is this:
                 ]
             ],
             
-            'dlds\metronic\bundles\ThemeAsset' => [
+            'isrba\metronic\bundles\ThemeAsset' => [
                 'addons'=>[
                     'default/login'=>[
                         'css'=>[
@@ -116,8 +116,8 @@ Here is my sample ```views/layout/main.php```:
 /* @var $content string */
 
 use yii\helpers\Html;
-use dlds\metronic\helpers\Layout;
-use dlds\metronic\Metronic;
+use isrba\metronic\helpers\Layout;
+use isrba\metronic\Metronic;
 
 $asset = Metronic::registerThemeAsset($this);
 
@@ -161,7 +161,7 @@ Metronic theme require that you replace yii\helpers\Html with it's helper. So, y
 
 ```
 <?php
-Yii::$classMap['yii\helpers\Html'] = '@vendor/dlds/yii2-metronic/helpers/Html.php';
+Yii::$classMap['yii\helpers\Html'] = '@vendor/isrba/yii2-metronic/helpers/Html.php';
 ?>
 ```
 

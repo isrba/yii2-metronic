@@ -4,10 +4,10 @@
  * @license http://yii2metronic.icron.org/license.html
  */
 
-namespace dlds\metronic\widgets;
+namespace isrba\metronic\widgets;
 
 use yii\helpers\Html;
-use dlds\metronic\bundles\MultiSelectAsset;
+use isrba\metronic\bundles\MultiSelectAsset;
 
 /**
  * MultiSelect renders MultiSelect component.

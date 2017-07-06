@@ -5,7 +5,7 @@
  * @license http://www.digitaldeals.cz/license/
  */
 
-namespace dlds\metronic\bundles;
+namespace isrba\metronic\bundles;
 
 class DatePickerAsset extends BaseAssetBundle {
 
@@ -19,7 +19,7 @@ class DatePickerAsset extends BaseAssetBundle {
         'plugins/bootstrap-datepicker/css/bootstrap-datepicker3.css',
     ];
     public $depends = [
-        'dlds\metronic\bundles\CoreAsset',
+        'isrba\metronic\bundles\CoreAsset',
     ];
 
     public function init()

@@ -5,10 +5,10 @@
  * @license http://www.digitaldeals.cz/license/
  */
 
-namespace dlds\metronic\bundles;
+namespace isrba\metronic\bundles;
 
 use Yii;
-use dlds\metronic\Metronic;
+use isrba\metronic\Metronic;
 
 class ThemeAsset extends BaseAssetBundle {
 
@@ -16,8 +16,8 @@ class ThemeAsset extends BaseAssetBundle {
      * @var array depended bundles
      */
     public $depends = [
-        'dlds\metronic\bundles\CoreAsset',
-        'dlds\metronic\bundles\StyleBasedAsset',
+        'isrba\metronic\bundles\CoreAsset',
+        'isrba\metronic\bundles\StyleBasedAsset',
     ];
 
     /**

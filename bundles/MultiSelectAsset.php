@@ -4,7 +4,7 @@
  * @license http://www.digitaldeals.cz/license/
  */
 
-namespace  dlds\metronic\bundles;
+namespace  isrba\metronic\bundles;
 
 /**
  * MultiSelectAsset for multi select widget.
@@ -21,6 +21,6 @@ class MultiSelectAsset extends BaseAssetBundle
     ];
 
     public $depends = [
-        'dlds\metronic\bundles\CoreAsset',
+        'isrba\metronic\bundles\CoreAsset',
     ];
 }

@@ -4,7 +4,7 @@
  * @license http://www.digitaldeals.cz/license/
  */
 
-namespace dlds\metronic\builders;
+namespace isrba\metronic\builders;
 
 use yii\helpers\Html;
 

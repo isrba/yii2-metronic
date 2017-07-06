@@ -4,14 +4,14 @@
  * @license http://yii2metronic.icron.org/license.html
  */
 
-namespace dlds\metronic\widgets;
+namespace isrba\metronic\widgets;
 
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use dlds\metronic\Metronic;
+use isrba\metronic\Metronic;
 
 /**
  * Nav renders a nav HTML component.

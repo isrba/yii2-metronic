@@ -5,15 +5,15 @@
  * @license http://www.digitaldeals.cz/license/
  */
 
-namespace dlds\metronic;
+namespace isrba\metronic;
 
-use dlds\metronic\bundles\IonRangeSliderAsset;
-use dlds\metronic\traits\HtmlTrait;
+use isrba\metronic\bundles\IonRangeSliderAsset;
+use isrba\metronic\traits\HtmlTrait;
 use Yii;
 use yii\helpers\Html;
 use yii\web\AssetBundle;
 use yii\base\InvalidConfigException;
-use dlds\metronic\bundles\ThemeAsset;
+use isrba\metronic\bundles\ThemeAsset;
 
 /**
  * This is the class of Metronic Component
@@ -167,7 +167,7 @@ class Metronic extends \yii\base\Component
     /**
      * Classes paths
      */
-    const CLASS_HTML = '@vendor/dlds/yii2-metronic/helpers/Html.php';
+    const CLASS_HTML = '@vendor/isrba/yii2-metronic/helpers/Html.php';
 
     /**
      * @var string version
