@@ -49,8 +49,6 @@ class ThemeAsset extends BaseAssetBundle {
      */
     public function init()
     {
-        $this->_handleSourcePath();
-
         $this->_handleAddons();
 
         $this->_handleDynamicCss();
@@ -58,17 +56,6 @@ class ThemeAsset extends BaseAssetBundle {
         $this->_handleDynamicJs();
 
         return parent::init();
-    }
-
-    /**
-     * Parses source path
-     */
-    private function _handleSourcePath()
-    {
-        if (Metronic::getComponent())
-        {
-            Metronic::getComponent()->parseAssetsParams($this->sourcePath);
-        }
     }
 
     /**

@@ -8,15 +8,23 @@
 namespace isrba\metronic\bundles;
 
 use yii\web\AssetBundle;
+use isrba\metronic\Metronic;
 
 class BaseAssetBundle extends AssetBundle {
     /**
      * @var string source assets path
      */
-    public $sourcePath = '@isrba/metronic/assets';
+    public $basePath = '';
+    public $baseUrl = '';
 
     public function init()
     {
+        if (Metronic::getComponent())
+        {
+            $this->basePath = Metronic::getComponent()->basePath;
+            $this->baseUrl = Metronic::getComponent()->baseUrl;
+        }
+
         foreach($this->css as $k=>$v) {
             if (strpos($v,'.min.css')===false) {
                 $fileName = str_replace('.css','.min.css',$v);

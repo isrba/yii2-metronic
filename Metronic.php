@@ -27,11 +27,6 @@ class Metronic extends \yii\base\Component
     public static $assetsBundle;
 
     /**
-     * Assets link
-     */
-    const ASSETS_LINK = __DIR__ . '/assets';
-
-    /**
      * Theme
      */
     const VERSION_1 = 'layout';
@@ -223,9 +218,14 @@ class Metronic extends \yii\base\Component
     public $ionSliderSkin = IonRangeSliderAsset::SKIN_SIMPLE;
 
     /**
-     * @var array resources paths
+     * @var string base path for Metronic assets
      */
-    public $resources;
+    public $basePath;
+
+    /**
+     * @var string base URL for Metronic assets
+     */
+    public $baseUrl;
 
     /**
      * @var string Component name used in the application
@@ -241,12 +241,8 @@ class Metronic extends \yii\base\Component
             throw new InvalidConfigException('Hover Sidebar Menu is not compatible with Fixed Sidebar Mode. Select Default Sidebar Mode Instead.');
         }
 
-        if (!$this->resources) {
-            throw new InvalidConfigException('You have to specify resources locations to be able to create symbolic links. Specify "admin" and "global" theme folder locations.');
-        }
-
-        if (!is_link(self::ASSETS_LINK) && !is_dir(self::ASSETS_LINK)) {
-            symlink($this->resources, self::ASSETS_LINK);
+        if (!$this->basePath || !$this->baseUrl) {
+            throw new InvalidConfigException('You have to specify basePath and baseUrl attributes to locate Metronic assets.');
         }
     }
 
