@@ -60,7 +60,13 @@ class NavBar extends \yii\bootstrap\NavBar {
         }
 
         echo Html::beginTag('div', $this->options);
-        echo Html::beginTag('div', ['class' => 'page-header-inner']);
+
+        if (Metronic::getComponent() && Metronic::LAYOUT_BOXED === Metronic::getComponent()->layoutOption)
+        {
+            echo Html::beginTag('div', ['class' => 'page-header-inner container']);
+        } else {
+            echo Html::beginTag('div', ['class' => 'page-header-inner']);
+        }
 
         Html::addCssClass($this->brandWrapperOptions, 'page-logo');
         echo Html::beginTag('div', $this->brandWrapperOptions);
