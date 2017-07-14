@@ -294,7 +294,7 @@ class Menu extends \yii\widgets\Menu {
         }
 
         $this->options['data-slide-speed'] = 200;
-        $this->options['data-auto-scroll'] = 'true';
+        $this->options['data-auto-scroll'] = 'false';
         $this->options['data-keep-expanded'] = 'false';
         $this->options['data-height'] = 261;
     }
