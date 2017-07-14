@@ -83,11 +83,8 @@ class Dropdown extends \yii\bootstrap\Dropdown {
 
     public function init()
     {
-
-        Html::addCssClass($this->options, 'dropdown-menu-list' );
         if ($this->dropUp) Html::addCssClass($this->options, 'bottom-up' );
         if ($this->pullRight) Html::addCssClass($this->options, 'pull-right' );
-        if (count($this->scroller)>0) Html::addCssClass($this->options, 'scroller' );
 
         parent::init();
     }
@@ -115,6 +112,18 @@ class Dropdown extends \yii\bootstrap\Dropdown {
             $lines[] = Html::tag('li', Html::tag('p', $this->title));
         }
 
+        if (!empty($this->more))
+        {
+            $url = ArrayHelper::getValue($this->more, 'url', '#');
+            $text = ArrayHelper::getValue($this->more, 'label', '');
+            $icon = ArrayHelper::getValue($this->more, 'icon', '');
+            if ($icon)
+            {
+                $icon = Html::tag('i', '', ['class' => $icon]);
+            }
+            $lines[] = Html::tag('li', Html::tag('h3', $text) . Html::tag('a',  $icon, ['href' => $url]), ['class' => 'external']);
+        }
+
         if (!empty($this->scroller))
         {
             if (!isset($this->scroller['height']))
@@ -124,7 +133,7 @@ class Dropdown extends \yii\bootstrap\Dropdown {
             $lines[] = Html::beginTag('li');
             $lines[] = Html::beginTag('ul', [
                 'style' => 'height: ' . $this->scroller['height'] . 'px;',
-                'class' => $this->options['class']
+                'class' => 'dropdown-menu-list scroller',
                 ]
             );
         }
@@ -142,7 +151,7 @@ class Dropdown extends \yii\bootstrap\Dropdown {
                 continue;
             }
 
-            if (in_array('divider', $item))
+            if (in_array('divider', $item, true))
             {
                 $lines[] = Html::tag('li', '', ['class' => 'divider']);
                 continue;
@@ -171,18 +180,6 @@ class Dropdown extends \yii\bootstrap\Dropdown {
         {
             $lines[] = Html::endTag('ul');
             $lines[] = Html::endTag('li');
-        }
-
-        if (!empty($this->more))
-        {
-            $url = ArrayHelper::getValue($this->more, 'url', '#');
-            $text = ArrayHelper::getValue($this->more, 'label', '');
-            $icon = ArrayHelper::getValue($this->more, 'icon', '');
-            if ($icon)
-            {
-                $icon = Html::tag('i', '', ['class' => $icon]);
-            }
-            $lines[] = Html::tag('li', Html::tag('a', $text . $icon, ['href' => $url]), ['class' => 'external']);
         }
 
         return Html::tag('ul', implode("\n", $lines), $this->options);
