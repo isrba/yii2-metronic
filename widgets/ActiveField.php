@@ -130,19 +130,20 @@ class ActiveField extends \yii\bootstrap\ActiveField {
     }
 
     /**
-     * Generates spinner component.
-     * @param array $options spinner options
+     * Generates clearing checkbox component.
+     * @param array $options clearing checkbox options
      * @return $this
      */
     public function clearingCheckbox($options = [])
     {
         $clearingCheckboxOptions = [
             'value' => 'clear-value',
-            'label' => 'or clear this value<span></span>',
+            'label' => '',
             'labelOptions' => ['class' => 'mt-checkbox mt-checkbox-outline'],
         ];
 
         $options = array_merge($clearingCheckboxOptions, $options);
+        $options['label'] .= '<span></span>';
 
         if (!$options['visible']) {
             return $this;
@@ -157,6 +158,34 @@ class ActiveField extends \yii\bootstrap\ActiveField {
 
         $this->parts['{input}'] .= "\n" . $checkbox;
 
+        return $this;
+    }
+	
+	/**
+     * Generates checkboxlist component with span tag required by Metronic .
+     * @param array $items checkboxlist items
+     * @param array $options checkboxlist options
+     * @return $this
+     */
+    public function checkboxlist($items, $options = [])
+    {
+        parent::checkboxlist($items, $options);
+
+        $this->parts['{input}'] = preg_replace('/<\/label>/', '<span></span></label>',  $this->parts['{input}']);
+        return $this;
+    }
+
+    /**
+     * Generates radioList component with span tag required by Metronic .
+     * @param array $items radioList items
+     * @param array $options radioList options
+     * @return $this
+     */
+    public function radioList($items, $options = [])
+    {
+        parent::radioList($items, $options);
+
+        $this->parts['{input}'] = preg_replace('/<\/label>/', '<span></span></label>',  $this->parts['{input}']);
         return $this;
     }
 
