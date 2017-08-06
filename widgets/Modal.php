@@ -94,7 +94,7 @@ class Modal extends Widget {
         $this->initOptions();
 
         echo $this->renderToggleButton()."\n";
-        echo Html::beginTag('div', $this->options)."\n";
+        //echo Html::beginTag('div', $this->options)."\n";
         echo $this->renderHeader()."\n";
         echo $this->renderBodyBegin()."\n";
     }
@@ -106,7 +106,7 @@ class Modal extends Widget {
     {
         echo "\n".$this->renderBodyEnd();
         echo "\n".$this->renderFooter();
-        echo "\n".Html::endTag('div');
+        //echo "\n".Html::endTag('div');
 
         ModalAsset::register($this->view);
         //$this->registerPlugin('spinner');
