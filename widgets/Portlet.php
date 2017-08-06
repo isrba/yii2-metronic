@@ -66,10 +66,9 @@ class Portlet extends Widget
      * Tools
      */
     const TOOL_MINIMIZE = 'collapse';
-    const TOOL_MODAL = 'modal';
     const TOOL_RELOAD = 'reload';
     const TOOL_CLOSE = 'remove';
-
+    const TOOL_FULLSCREEN = 'fullscreen';
     /**
      * @var string The portlet title
      */
@@ -261,6 +260,10 @@ class Portlet extends Widget
 
                     case self::TOOL_RELOAD :
                         $class = 'reload';
+                        break;
+
+                    case self::TOOL_FULLSCREEN :
+                        $class = 'fullscreen';
                         break;
                 }
                 $tools[] = Html::tag('a', '', ['class' => $class, 'href' => '']);
