@@ -26,6 +26,7 @@ class ThemeAsset extends BaseAssetBundle {
     public $css = [
         'layouts/{version}/css/layout.css',
         'layouts/{version}/css/themes/{theme}.css',
+        'layouts/{version}/css/custom.css',
     ];
 
     /**
@@ -34,6 +35,7 @@ class ThemeAsset extends BaseAssetBundle {
     public $js = [
         'global/scripts/app.js',
         'layouts/{version}/scripts/layout.js',
+        'layouts/{version}/scripts/custom.js',
     ];
 
     /**
