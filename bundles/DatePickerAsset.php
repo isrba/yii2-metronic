@@ -9,22 +9,15 @@ namespace isrba\metronic\bundles;
 
 class DatePickerAsset extends BaseAssetBundle {
 
-    public static $extraJs = [];
-
     public $js = [
-        'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js',
+        'global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
     ];
+
     public $css = [
-        'plugins/bootstrap-datepicker/css/bootstrap-datepicker.css',
-        'plugins/bootstrap-datepicker/css/bootstrap-datepicker3.css',
+        'global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
     ];
+
     public $depends = [
         'isrba\metronic\bundles\CoreAsset',
     ];
-
-    public function init()
-    {
-        $this->js = array_merge($this->js, static::$extraJs);
-    }
-
 }
