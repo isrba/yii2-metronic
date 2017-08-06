@@ -138,7 +138,9 @@ class Button extends \yii\bootstrap\Button {
             Html::addCssClass($this->options, 'btn-block');
         }
 
-        $this->options['type'] = 'button';
+        if (!isset($this->options['type'])) {
+            $this->options['type'] = 'button';
+        }
     }
 
     /**
