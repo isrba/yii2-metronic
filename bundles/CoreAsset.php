@@ -48,8 +48,6 @@ class CoreAsset extends BaseAssetBundle {
         'global/plugins/jquery.blockui.min.js',
         'global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',
         'global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
-
-
-
+        'global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js',
     ];
 }
