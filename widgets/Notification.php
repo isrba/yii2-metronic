@@ -10,10 +10,10 @@ use yii\helpers\Json;
 use yii\helpers\StringHelper;
 use yii\web\JsExpression;
 use yii\web\View;
-
+use isrba\metronic\bundles\NotificationAsset;
 
 /**
- * Notification renders a notification box that can be opened by clicking on a button.
+ * Notification renders a toastr notification box
  *
  * For example,
  * ```php
@@ -21,11 +21,6 @@ use yii\web\View;
  *     'title' => 'Success! Some Header Goes Here',
  *     'body' => 'Duis mollis, est non commodo luctus',
  *     'type' => Notification::TYPE_INFO,
- *     'openButton' => [
- *          'type' => Button::TYPE_M_GREEN,
- *          'label' => 'Notification',
- *          'icon' => 'fa fa-bell-o',
- *      ]
  * ]);
  * ```
  *
@@ -70,10 +65,6 @@ class Notification extends  Widget
      * Valid values  are 'danger', 'info', 'success', 'warning'.
      */
     public $type = self::TYPE_SUCCESS;
-    /**
-     * @var array the configuration array for [[Button]].
-     */
-    public $openButton = [];
 
     /**
      * Executes the widget.
@@ -89,14 +80,12 @@ class Notification extends  Widget
     public function run()
     {
         $this->body .= ob_get_clean();
-        if (!empty($this->openButton)) {
-            /** @var Button $widget */
-            $js =  'toastr.options = ' . Json::encode($this->clientOptions) . ';';
-            $this->view->registerJs($js, View::POS_READY);
-            $this->initOpenButton();
-        } else {
-            return null;
-        }
+
+        $js =  'toastr.options = ' . Json::encode($this->clientOptions) . ';';
+        $this->view->registerJs($js, View::POS_READY);
+        $js = 'toastr["' . $this->type. '"]("' . $this->body . '", "' . $this->title . '")';
+        $this->view->registerJs($js, View::POS_READY);
+
         NotificationAsset::register($this->view);
     }
 
@@ -122,20 +111,5 @@ class Notification extends  Widget
         ];
 
         $this->clientOptions = array_merge($defaultOptions, $this->clientOptions);
-    }
-
-    /**
-     * Initializes the widget Button options.
-     * This method sets the default values for various options.
-     */
-    public function initOpenButton()
-    {
-        $widget = Button::begin($this->openButton);
-        $msg = "'{$this->body}', '{$this->title}'";
-        $jsOpen = 'toastr.' . $this->type . '(' . $msg . ')';
-        if(!isset($widget->clientEvents['click'])) {
-            $widget->clientEvents['click'] =  "function(){{$jsOpen};}";
-        }
-        $widget->run();
     }
 }
