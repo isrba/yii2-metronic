@@ -17,7 +17,7 @@ use yii\helpers\Html;
  * ```php
  * // a button group vertically stacked with items configuration
  * echo ButtonGroup::widget([
- *     'vertical' => true,
+ *     'stacked' => true,
  *     'buttons' => [
  *         ['label' => 'A'],
  *         ['label' => 'B'],
