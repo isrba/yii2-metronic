@@ -13,18 +13,15 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\widgets\ActiveFormAsset;
 
-class ActiveForm extends \yii\widgets\ActiveForm {
+class ActiveForm extends \yii\bootstrap\ActiveForm {
 
     // Buttons align
     const BUTTONS_ALIGN_LEFT = 'left';
     const BUTTONS_ALIGN_RIGHT = 'right';
+    const BUTTONS_ALIGN_CENTER = 'center';
     // Buttons position
     const BUTTONS_POSITION_TOP = 'top';
     const BUTTONS_POSITION_BOTTOM = 'bottom';
-    // Form type
-    const TYPE_HORIZONTAL = 'horizontal';
-    const TYPE_VERTICAL = 'vertical';
-    const TYPE_INLINE = 'inline';
 
     /**
      * @var bool Indicates whether form rows is separated.
@@ -42,25 +39,19 @@ class ActiveForm extends \yii\widgets\ActiveForm {
     public $bordered = false;
 
     /**
-     * @var string ActiveForm type.
-     * Valid values are 'horizontal', 'vertical', 'inline'
-     */
-    public $type = self::TYPE_VERTICAL;
-
-    /**
      * @var array the [[ActiveForm]] buttons.
      * Note that if are empty option 'items', then will not generated element is wrapped buttons.
      * It is an array of the following structure:
      * ```php
      * [
      *     //optional, horizontal align
-     *     'align' => ActiveForm::BUTTONS_POSITION_LEFT,
+     *     'align' => ActiveForm::BUTTONS_ALIGN_LEFT,
      *     //optional, vertical position
      *     'position' => ActiveForm::BUTTONS_POSITION_BOTTOM,
      *      //optional, array of buttons
      *     'items' => [
-     *         Button::widget('label' => 'Save', 'options' => ['type' => 'submit']),
-     *         Button::widget('label' => 'Back'),
+     *         Button::widget(['label' => 'Save', 'options' => ['type' => 'submit']]),
+     *         Button::widget(['label' => 'Back']),
      *     ],
      *     // optional, the HTML attributes (name-value pairs) for the form actions tag.
      *     'options' => ['class' => 'fluid']
@@ -86,14 +77,22 @@ class ActiveForm extends \yii\widgets\ActiveForm {
      */
     public function init()
     {
+        if (!in_array($this->layout, ['default', 'horizontal', 'inline'])) {
+            throw new InvalidConfigException('Invalid layout type: ' . $this->layout);
+        }
+
+        if ($this->layout !== 'default') {
+            Html::addCssClass($this->options, 'form-' . $this->layout);
+        }
+
         if (!isset($this->options['id']))
         {
             $this->options['id'] = $this->getId();
         }
 
-        switch ($this->type)
+        switch ($this->layout)
         {
-            case self::TYPE_HORIZONTAL:
+            case 'horizontal':
                 if ($this->stripped)
                 {
                     Html::addCssClass($this->options, 'form-row-stripped');
@@ -106,20 +105,15 @@ class ActiveForm extends \yii\widgets\ActiveForm {
                 {
                     Html::addCssClass($this->options, 'form-bordered');
                 }
-                Html::addCssClass($this->options, 'form-horizontal');
-                $this->fieldConfig = ArrayHelper::merge([
-                            'labelOptions' => ['class' => 'col-md-3 control-label'],
-                            'template' => "{label}\n" . Html::tag('div', "{input}\n{error}\n{hint}", ['class' => 'col-md-9']),
-                                ], $this->fieldConfig);
                 break;
-            case self::TYPE_INLINE:
+            case 'inline':
                 Html::addCssClass($this->options, 'form-inline');
                 $this->fieldConfig = ArrayHelper::merge([
-                            'labelOptions' => ['class' => 'sr-only'],
-                                ], $this->fieldConfig);
+                    'labelOptions' => ['class' => 'sr-only'],
+                ], $this->fieldConfig);
                 break;
         }
-        if (!isset($this->fieldConfig['class']))
+        if (is_array($this->fieldConfig) && !isset($this->fieldConfig['class']))
         {
             $this->fieldConfig['class'] = ActiveField::className();
         }
@@ -193,22 +187,12 @@ class ActiveForm extends \yii\widgets\ActiveForm {
             {
                 Html::addCssClass($actionsOptions, 'right');
             }
+            if (isset($this->buttons['align']) && $this->buttons['align'] == self::BUTTONS_ALIGN_CENTER)
+            {
+                Html::addCssClass($actionsOptions, 'text-center');
+            }
             $rowOptions = [];
             $buttons = implode("\n", $this->buttons['items']);
-            switch ($this->type)
-            {
-                case self::TYPE_HORIZONTAL:
-                    Html::addCssClass($actionsOptions, 'fluid');
-                    preg_match('#col-md-(\d+)#', $this->fieldConfig['labelOptions']['class'], $matches);
-                    if (isset($matches[1]))
-                    {
-                        $offset = $matches[1];
-                        Html::addCssClass($rowOptions, 'col-md-offset-' . $offset);
-                        Html::addCssClass($rowOptions, 'col-md-' . 12 - $offset);
-                        $buttons = Html::tag('div', $buttons, $rowOptions);
-                    }
-                    break;
-            }
 
             return Html::tag('div', $buttons, $actionsOptions);
         }

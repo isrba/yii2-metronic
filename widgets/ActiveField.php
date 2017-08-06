@@ -11,7 +11,7 @@ namespace isrba\metronic\widgets;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
-class ActiveField extends \yii\widgets\ActiveField {
+class ActiveField extends \yii\bootstrap\ActiveField {
 
     /**
      * @var ActiveForm the form that this field is associated with.
@@ -39,6 +39,7 @@ class ActiveField extends \yii\widgets\ActiveField {
      * [
      *     'icon' => 'fa fa-bookmark-o',
      *     'position' => ActiveField::ICON_POSITION_LEFT,
+     *     'class' => 'input-icon-sm'
      * ]
      * ```
      * @return static the field object itself
@@ -51,10 +52,13 @@ class ActiveField extends \yii\widgets\ActiveField {
             $position = ArrayHelper::remove($options, 'position', self::ICON_POSITION_LEFT);
             if ($position != self::ICON_POSITION_RIGHT)
             {
-                $position = '';
+                Html::addCssClass($options, $position);
             }
+
+            Html::addCssClass($options, 'input-icon');
+
             $this->parts['{input}'] = Html::tag('i', '', ['class' => $icon]) . "\n" . $this->parts['{input}'];
-            $this->parts['{input}'] = Html::tag('div', $this->parts['{input}'], ['class' => 'input-icon ' . $position]);
+            $this->parts['{input}'] = Html::tag('div', $this->parts['{input}'], ['class' => $options['class']]);
         }
 
         return $this;
@@ -69,6 +73,7 @@ class ActiveField extends \yii\widgets\ActiveField {
      * [
      *     'icon' => 'fa fa-bookmark-o',
      *     'position' => ActiveField::ICON_POSITION_LEFT,
+     *      'class' => 'input-group-sm'
      * ]
      * ```
      * @return static the field object itself
@@ -78,6 +83,8 @@ class ActiveField extends \yii\widgets\ActiveField {
         $icon = ArrayHelper::remove($options, 'icon', null);
         if ($icon)
         {
+            Html::addCssClass($options, 'input-group');
+
             $addon = Html::tag('span', Html::tag('i', '', ['class' => $icon]), ['class' => 'input-group-addon']);
             $position = ArrayHelper::remove($options, 'position', self::ICON_POSITION_LEFT);
             if ($position == self::ICON_POSITION_RIGHT)
@@ -88,7 +95,7 @@ class ActiveField extends \yii\widgets\ActiveField {
             {
                 $this->parts['{input}'] = $addon . "\n" . $this->parts['{input}'];
             }
-            $this->parts['{input}'] = Html::tag('div', $this->parts['{input}'], ['class' => 'input-group']);
+            $this->parts['{input}'] = Html::tag('div', $this->parts['{input}'], ['class' => $options['class']]);
         }
 
         return $this;
@@ -123,13 +130,44 @@ class ActiveField extends \yii\widgets\ActiveField {
     }
 
     /**
+     * Generates spinner component.
+     * @param array $options spinner options
+     * @return $this
+     */
+    public function clearingCheckbox($options = [])
+    {
+        $clearingCheckboxOptions = [
+            'value' => 'clear-value',
+            'label' => 'or clear this value<span></span>',
+            'labelOptions' => ['class' => 'mt-checkbox mt-checkbox-outline'],
+        ];
+
+        $options = array_merge($clearingCheckboxOptions, $options);
+
+        if (!$options['visible']) {
+            return $this;
+        }
+
+        $name = $this->model->formName() . '[' . $this->attribute . ']';
+
+        Html::addCssClass($options, 'clearing-checkbox');
+
+        $checkbox = Html::checkbox($name, false, $options);
+        $checkbox = Html::tag('div', $checkbox, ['class' => $options['class']]);
+
+        $this->parts['{input}'] .= "\n" . $checkbox;
+
+        return $this;
+    }
+
+    /**
      * Generates dateRangePicker component [[DateRangePicker]].
      * @param array $options dateRangePicker options
      * @return $this
      */
     public function dateRangePicker($options = [])
     {
-        if ($this->form->type == ActiveForm::TYPE_VERTICAL)
+        if ($this->form->layout == 'vertical')
         {
             //$options = array_merge($options, ['options' => ['style' => 'display:table-cell;']]);
             $options = array_merge($options, ['options' => ['class' => 'show']]);
@@ -140,8 +178,8 @@ class ActiveField extends \yii\widgets\ActiveField {
     }
 
     /**
-     * Generates dateRangePicker component [[DateRangePicker]].
-     * @param array $options dateRangePicker options
+     * Generates datePicker component [[DatePicker]].
+     * @param array $options datePicker options
      * @return $this
      */
     public function datePicker($options = [])
