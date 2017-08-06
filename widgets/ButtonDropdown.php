@@ -51,6 +51,11 @@ class ButtonDropdown extends \yii\bootstrap\ButtonDropdown {
     public $hover = false;
 
     /**
+     * @var bool Indicates whether the dropdown shoud act as a dropup.
+     */
+    public $dropup = false;
+
+    /**
      * Inits ButtonDropdown
      */
     public function init()
@@ -81,7 +86,11 @@ class ButtonDropdown extends \yii\bootstrap\ButtonDropdown {
      */
     public function run()
     {
-        echo Html::tag('div', sprintf('%s%s', $this->renderButton(), $this->renderDropdown()), ['class' => 'btn-group']);
+        $options = ['class' => 'btn-group'];
+        if ($this->dropup) {
+            Html::addCssClass($options, 'dropup');
+        }
+        echo Html::tag('div', sprintf('%s%s', $this->renderButton(), $this->renderDropdown()), $options);
     }
 
     /**
