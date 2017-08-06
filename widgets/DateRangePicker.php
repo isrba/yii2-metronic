@@ -10,6 +10,7 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\View;
+use isrba\metronic\bundles\DateRangePickerAsset;
 
 /**
  *  DateRangePicker renders dateRangePicker widget.
@@ -214,7 +215,7 @@ class DateRangePicker extends InputWidget {
      * @param string $name the name of the Bootstrap plugin
      * @param string $callback second parameter option of the Bootstrap plugin
      */
-    protected function registerPlugin($name, $callback)
+    protected function registerPlugin($name, $callback = null)
     {
         $view = $this->getView();
         $id = $this->options['id'];

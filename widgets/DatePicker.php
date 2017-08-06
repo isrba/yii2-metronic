@@ -11,6 +11,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\web\View;
+use isrba\metronic\bundles\DatePickerAsset;
 
 /**
  * DatePicker renders an datepicker jQuery UI widget.
@@ -110,7 +111,6 @@ class DatePicker extends InputWidget {
         echo implode("\n", $contents);
         if ($this->language)
         {
-            DatePickerAsset::$extraJs[] = 'plugins/bootstrap-datepicker-extended/js/locales/bootstrap-datepicker.' . $this->language . '.js';
             $this->clientOptions['language'] = $this->language;
         }
         DatePickerAsset::register($this->view);
