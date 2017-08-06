@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use isrba\metronic\bundles\GridViewSortableAsset;
+use yii\widgets\Pjax;
 
 class GridView extends \kartik\grid\GridView {
 
@@ -130,5 +131,51 @@ class GridView extends \kartik\grid\GridView {
     protected function getStorageColumns()
     {
         return [];
+    }
+
+    /**
+     * Begins the markup for the [[Pjax]] container.
+     */
+    protected function beginPjax()
+    {
+        if (!$this->pjax) {
+            return;
+        }
+        $view = $this->getView();
+        if (empty($this->pjaxSettings['options']['id'])) {
+            $this->pjaxSettings['options']['id'] = $this->options['id'] . '-pjax';
+        }
+        $container = 'jQuery("#' . $this->pjaxSettings['options']['id'] . '")';
+        $js = $container;
+        if (ArrayHelper::getValue($this->pjaxSettings, 'neverTimeout', true)) {
+            $js .= ".on('pjax:timeout', function(e){e.preventDefault()})";
+        }
+        $loadingCss = ArrayHelper::getValue($this->pjaxSettings, 'loadingCssClass', 'kv-grid-loading');
+        $postPjaxJs = "setTimeout({$this->_gridClientFunc}, 2500);";
+        $grid = 'jQuery("#' . $this->containerOptions['id'] . '")';
+        if ($loadingCss !== false) {
+            if ($loadingCss === true) {
+                $loadingCss = 'kv-grid-loading';
+            }
+            $js .= ".on('pjax:send', function(){{$grid}.addClass('{$loadingCss}')})";
+            $postPjaxJs .= "{$grid}.removeClass('{$loadingCss}');";
+        }
+
+        $js .= ".on('pjax:send', function(){App.blockUI({
+                    target: {$grid},
+                    animate: true,
+                })})";
+        $postPjaxJs .= "App.unblockUI($grid);\n";
+
+        $postPjaxJs .= "\n" . $this->_toggleScript;
+        if (!empty($postPjaxJs)) {
+            $event = 'pjax:complete.' . hash('crc32', $postPjaxJs);
+            $js .= ".off('{$event}').on('{$event}', function(){{$postPjaxJs}})";
+        }
+        if ($js != $container) {
+            $view->registerJs("{$js};");
+        }
+        Pjax::begin($this->pjaxSettings['options']);
+        echo ArrayHelper::getValue($this->pjaxSettings, 'beforeGrid', '');
     }
 }
