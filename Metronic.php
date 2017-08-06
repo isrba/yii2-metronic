@@ -215,7 +215,7 @@ class Metronic extends \yii\base\Component
     public $footerOption = self::FOOTER_DEFAULT;
 
     /** @var string IonRangeSlider skin */
-    public $ionSliderSkin = IonRangeSliderAsset::SKIN_SIMPLE;
+    public $ionSliderSkin = IonRangeSliderAsset::SKIN_NICE;
 
     /**
      * @var string base path for Metronic assets
