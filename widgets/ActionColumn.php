@@ -14,62 +14,47 @@ class ActionColumn extends \yii\grid\ActionColumn {
     /**
      * @var array the HTML options for the data cell tags.
      */
-    public $headerOptions = ['class' => 'text-center'];
+    public $headerOptions = ['class' => 'text-center text-nowrap'];
 
     /**
      * @var array the HTML options for the data cell tags.
      */
-    public $contentOptions = ['class' => 'text-center'];
+    public $contentOptions = ['class' => 'text-center text-nowrap'];
 
     /**
      * @var string the template that is used to render the content in each data cell.
      */
-    public $template = '{update}';
+    public $template = '{view}{update}';
 
     /**
      * @var string the icon for the view button.
      */
-    public $viewButtonIcon = 'icon-eye';
+    public $viewButtonIcon = 'fa fa-search';
 
     /**
      * @var string the icon for the update button.
      */
-    public $updateButtonIcon = 'icon-pencil';
+    public $updateButtonIcon = 'fa fa-edit';
 
     /**
      * @var string the icon for the delete button.
      */
-    public $deleteButtonIcon = 'icon-trash';
-
-    /**
-     * @var string the icon for the delete button.
-     */
-    public $resetButtonIcon = 'icon-close';
-
-    /**
-     * @var mixed array pager settings or false to disable pager
-     */
-    public $pageSizeOptions = [20 => 20, 50 => 50];
+    public $deleteButtonIcon = 'fa fa-trash';
 
     /**
      * @var string btn view class
      */
-    public $btnViewClass = 'action-view';
+    public $btnViewClass = 'btn btn-outline btn-xs blue-madison';
 
     /**
      * @var string btn update class
      */
-    public $btnUpdateClass = 'action-update';
+    public $btnUpdateClass = 'btn btn-outline btn-xs blue-madison';
 
     /**
      * @var string btn delete class
      */
     public $btnDeleteClass = 'action-delete';
-
-    /**
-     * @var mixed filter reset route
-     */
-    public $routeFilterReset = null;
 
     /**
      * Initializes the default button rendering callbacks.
@@ -79,7 +64,7 @@ class ActionColumn extends \yii\grid\ActionColumn {
         if (!isset($this->buttons['view']))
         {
             $this->buttons['view'] = function ($url, $model, $key) {
-                return Html::a('<span class="'.$this->viewButtonIcon.'"></span>', $url, [
+                return Html::a('<i class="'.$this->viewButtonIcon.'"></i> View', $url, [
                         'title' => \Yii::t('yii', 'View'),
                         'data-pjax' => '0',
                         'class' => $this->btnViewClass,
@@ -89,7 +74,7 @@ class ActionColumn extends \yii\grid\ActionColumn {
         if (!isset($this->buttons['update']))
         {
             $this->buttons['update'] = function ($url, $model, $key) {
-                return Html::a('<span class="'.$this->updateButtonIcon.'"></span>', $url, [
+                return Html::a('<i class="'.$this->updateButtonIcon.'"></i> Edit', $url, [
                         'title' => \Yii::t('yii', 'Update'),
                         'data-pjax' => '0',
                         'class' => $this->btnUpdateClass,
@@ -108,44 +93,5 @@ class ActionColumn extends \yii\grid\ActionColumn {
                 ]);
             };
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function renderHeaderCellContent()
-    {
-        if (!$this->routeFilterReset)
-        {
-            $route = \Yii::$app->controller->getRoute();
-
-            if (!\yii\helpers\StringHelper::startsWith($route, '/'))
-            {
-                $route = '/'.$route;
-            }
-
-            $this->routeFilterReset = [$route];
-        }
-
-        return Html::a('<span class="'.$this->resetButtonIcon.'"></span>', $this->routeFilterReset, [
-                'title' => \Yii::t('yii', 'Reset filter'),
-                'data-pjax' => '0',
-        ]);
-    }
-
-    /**
-     * Renders the filter cell content.
-     * The default implementation simply renders a space.
-     * This method may be overridden to customize the rendering of the filter cell (if any).
-     * @return string the rendering result
-     */
-    protected function renderFilterCellContent()
-    {
-        if (!$this->pageSizeOptions)
-        {
-            return parent::renderFilterCellContent();
-        }
-
-        return Html::dropDownList($this->grid->dataProvider->pagination->pageSizeParam, $this->grid->dataProvider->pagination->pageSize, $this->pageSizeOptions);
     }
 }
