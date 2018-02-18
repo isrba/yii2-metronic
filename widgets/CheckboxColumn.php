@@ -32,7 +32,7 @@ class CheckboxColumn extends \kartik\grid\CheckboxColumn {
      */
     protected function renderDataCellContent($model, $key, $index)
     {
-        if ($this->checkboxOptions instanceof Closure) {
+        if (is_callable($this->checkboxOptions)) {
             $options = call_user_func($this->checkboxOptions, $model, $key, $index, $this);
         } else {
             $options = $this->checkboxOptions;

@@ -86,6 +86,10 @@ class ButtonDropdown extends \yii\bootstrap\ButtonDropdown {
      */
     public function run()
     {
+        if (empty($this->dropdown['items'])) {
+            return;
+        }
+
         $options = ['class' => 'btn-group'];
         if ($this->dropup) {
             Html::addCssClass($options, 'dropup');

@@ -141,7 +141,7 @@ class DateRangePicker extends InputWidget {
                             + '{$this->separator}' + end.format('{$this->labelDateFormat} '));
                         // set value to hidden input
                         $('input[name=\"{$name}\"]').val(start.format('{$this->clientOptions['format']}')
-                            + '{$this->separator}' + end.format('{$this->clientOptions['format']}'));
+                            + '{$this->separator}' + end.format('{$this->clientOptions['format']}')).trigger('change');
                     }";
                 if (count($arrValue) == 2)
                 {

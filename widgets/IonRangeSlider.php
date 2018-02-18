@@ -52,6 +52,8 @@ class IonRangeSlider extends InputWidget {
      */
     public function run()
     {
+        Html::addCssClass($this->options, 'ion-range-slider');
+
         if ($this->hasModel())
         {
             $values = explode($this->separator, $this->model->{$this->attribute});
@@ -72,6 +74,7 @@ class IonRangeSlider extends InputWidget {
             }
             echo Html::textInput($this->name, $this->value, $this->options);
         }
+
         IonRangeSliderAsset::register($this->view);
         $this->registerPlugin('ionRangeSlider');
     }
