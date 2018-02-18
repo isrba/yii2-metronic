@@ -277,7 +277,7 @@ class Portlet extends Widget
                 $headerOptions = ArrayHelper::getValue($tab, 'headerOptions', []);
 
                 if (isset($tab['active']) && $tab['active']) {
-                    Html::addCssClass($headerOptions, 'active');
+                    //Html::addCssClass($headerOptions, 'active');
                 }
 
                 $options = ArrayHelper::getValue($tab, 'options', ['class' => 'nav nav-tabs']);
