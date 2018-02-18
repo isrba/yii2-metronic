@@ -24,6 +24,7 @@ class CoreAsset extends BaseAssetBundle {
         'global/plugins/simple-line-icons/simple-line-icons.min.css',
         // 'global/plugins/bootstrap/css/bootstrap.min.css',
         'global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
+        'custom/plugins/jquery-pietimer/css/jquery.pietimer.css',
     ];
 
     /**
@@ -49,5 +50,8 @@ class CoreAsset extends BaseAssetBundle {
         'global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',
         'global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
         'global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js',
+        'global/plugins/js.cookie.min.js',
+        'global/scripts/app.js',
+        'custom/plugins/jquery-pietimer/scripts/jquery.pietimer.js',
     ];
 }

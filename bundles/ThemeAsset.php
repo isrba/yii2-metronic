@@ -26,16 +26,13 @@ class ThemeAsset extends BaseAssetBundle {
     public $css = [
         'layouts/{version}/css/layout.css',
         'layouts/{version}/css/themes/{theme}.css',
-        'layouts/{version}/css/custom.css',
     ];
 
     /**
      * @var array js assets
      */
     public $js = [
-        'global/scripts/app.js',
         'layouts/{version}/scripts/layout.js',
-        'layouts/{version}/scripts/custom.js',
     ];
 
     /**
@@ -54,7 +51,7 @@ class ThemeAsset extends BaseAssetBundle {
 
         $this->_handleDynamicJs();
 
-        return parent::init();
+        parent::init();
     }
 
     /**
