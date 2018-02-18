@@ -45,6 +45,11 @@ class NavBar extends \yii\bootstrap\NavBar {
     public $brandLogoUrl;
 
     /**
+     * @var string the environment label which will be displayed bellow the logo.
+     */
+    public $environmentLabel;
+
+    /**
      * @var string the url to logo of the brand.
      */
     public $brandWrapperOptions;
@@ -71,6 +76,11 @@ class NavBar extends \yii\bootstrap\NavBar {
         Html::addCssClass($this->brandWrapperOptions, 'page-logo');
         echo Html::beginTag('div', $this->brandWrapperOptions);
         echo $this->renderBrand();
+
+        if ($this->environmentLabel) {
+            echo '<div class="environment-label">' . $this->environmentLabel . '</div>';
+        }
+
         echo $this->renderToggleButton();
         echo Html::endTag('div');
     }
