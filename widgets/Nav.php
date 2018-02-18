@@ -60,6 +60,7 @@ class Nav extends \yii\bootstrap\Nav {
     const TYPE_INBOX = 'inbox';
     const TYPE_TASKS = 'tasks';
     const TYPE_USER = 'user';
+    const TYPE_LANGUAGE = 'language';
 
     /**
      * Navbars
@@ -158,7 +159,7 @@ class Nav extends \yii\bootstrap\Nav {
 
         if ($dropdownType !== self::TYPE_DEFAULT)
         {
-            if ($dropdownType !== self::TYPE_USER)
+            if ($dropdownType !== self::TYPE_USER && $dropdownType !== self::TYPE_LANGUAGE)
             {
                 Html::addCssClass($options, 'dropdown-extended');
             }
