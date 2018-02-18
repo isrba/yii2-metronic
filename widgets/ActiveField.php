@@ -98,6 +98,42 @@ class ActiveField extends \yii\bootstrap\ActiveField {
             $this->parts['{input}'] = Html::tag('div', $this->parts['{input}'], ['class' => $options['class']]);
         }
 
+        $text = ArrayHelper::remove($options, 'text', null);
+        if ($text)
+        {
+            Html::addCssClass($options, 'input-group');
+
+            $addon = Html::tag('span', $text, ['class' => 'input-group-addon']);
+            $position = ArrayHelper::remove($options, 'position', self::ICON_POSITION_LEFT);
+            if ($position == self::ICON_POSITION_RIGHT)
+            {
+                $this->parts['{input}'] .= "\n" . $addon;
+            }
+            else
+            {
+                $this->parts['{input}'] = $addon . "\n" . $this->parts['{input}'];
+            }
+            $this->parts['{input}'] = Html::tag('div', $this->parts['{input}'], ['class' => $options['class']]);
+        }
+
+        $button = ArrayHelper::remove($options, 'button', null);
+        if ($button)
+        {
+            Html::addCssClass($options, 'input-group');
+
+            $addon = Html::tag('span', $button, ['class' => 'input-group-btn']);
+            $position = ArrayHelper::remove($options, 'position', self::ICON_POSITION_LEFT);
+            if ($position == self::ICON_POSITION_RIGHT)
+            {
+                $this->parts['{input}'] .= "\n" . $addon;
+            }
+            else
+            {
+                $this->parts['{input}'] = $addon . "\n" . $this->parts['{input}'];
+            }
+            $this->parts['{input}'] = Html::tag('div', $this->parts['{input}'], ['class' => $options['class']]);
+        }
+
         return $this;
     }
 
@@ -160,8 +196,8 @@ class ActiveField extends \yii\bootstrap\ActiveField {
 
         return $this;
     }
-	
-	/**
+
+    /**
      * Generates checkboxlist component with span tag required by Metronic .
      * @param array $items checkboxlist items
      * @param array $options checkboxlist options
@@ -169,6 +205,23 @@ class ActiveField extends \yii\bootstrap\ActiveField {
      */
     public function checkboxlist($items, $options = [])
     {
+        $options = array_merge_recursive($options, [
+            'class' => 'mt-checkbox-list',
+            'item' => function ($index, $label, $name, $checked, $value) {
+                return Html::checkbox($name, $checked, [
+                    'labelOptions' => [
+                        'class' => 'mt-checkbox mt-checkbox-outline'
+                    ],
+                    'value' => $value,
+                    'label' => $label . '<span></span>',
+                ]);
+            },
+        ]);
+
+        if ($this->inline) {
+            Html::addCssClass($options, 'mt-checkbox-inline');
+        }
+
         parent::checkboxlist($items, $options);
 
         $this->parts['{input}'] = preg_replace('/<\/label>/', '<span></span></label>',  $this->parts['{input}']);
@@ -181,11 +234,26 @@ class ActiveField extends \yii\bootstrap\ActiveField {
      * @param array $options radioList options
      * @return $this
      */
-    public function radioList($items, $options = [])
-    {
+    public function radioList($items, $options = []) {
+        $options = array_merge_recursive($options, [
+            'class' => 'mt-radio-list',
+            'item' => function ($index, $label, $name, $checked, $value) {
+                return Html::radio($name, $checked, [
+                    'labelOptions' => [
+                        'class' => 'mt-radio mt-radio-outline'
+                    ],
+                    'value' => $value,
+                    'label' => $label . '<span></span>',
+                ]);
+            },
+        ]);
+
+        if ($this->inline) {
+            Html::addCssClass($options, 'mt-radio-inline');
+        }
+
         parent::radioList($items, $options);
 
-        $this->parts['{input}'] = preg_replace('/<\/label>/', '<span></span></label>',  $this->parts['{input}']);
         return $this;
     }
 
@@ -223,12 +291,40 @@ class ActiveField extends \yii\bootstrap\ActiveField {
     }
 
     /**
+     * Generates timePicker component [[TimePicker]].
+     * @param array $options timePicker options
+     * @return $this
+     */
+    public function timePicker($options = [])
+    {
+        $this->parts['{input}'] = TimePicker::widget(array_merge($options, ['model' => $this->model, 'attribute' => $this->attribute]));
+
+        return $this;
+    }
+
+    /**
+     * Generates select component [[Select]].
+     * @param array $options select options
+     * @return $this
+     */
+    public function select($options = [])
+    {
+        $this->parts['{input}'] = Select::widget(array_merge($options, ['model' => $this->model, 'attribute' => $this->attribute]));
+
+        return $this;
+    }
+
+    /**
      * Generates select2 component [[Select2]].
      * @param array $options select2 options
      * @return $this
      */
     public function select2($options = [])
     {
+        if (!isset($options['multiple']) || !$options['multiple']) {
+            $options['data'] = ['' => ''] + $options['data'];
+        }
+
         $this->parts['{input}'] = Select2::widget(array_merge($options, ['model' => $this->model, 'attribute' => $this->attribute]));
 
         return $this;
@@ -253,4 +349,10 @@ class ActiveField extends \yii\bootstrap\ActiveField {
         return $this;
     }
 
+    public function tree($options = [])
+    {
+        $this->parts['{input}'] = Tree::widget(array_merge($options, ['model' => $this->model, 'attribute' => $this->attribute]));
+
+        return $this;
+    }
 }
