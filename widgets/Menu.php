@@ -297,6 +297,10 @@ class Menu extends \yii\widgets\Menu {
         $this->options['data-auto-scroll'] = 'false';
         $this->options['data-keep-expanded'] = 'false';
         $this->options['data-height'] = 261;
+
+        if (isset($_COOKIE['sidebar_closed']) && $_COOKIE['sidebar_closed'] == '1') {
+            Html::addCssClass($this->options, 'page-sidebar-menu-closed');
+        }
     }
 
 }

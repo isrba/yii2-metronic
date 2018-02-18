@@ -7,8 +7,8 @@
 
 namespace isrba\metronic\helpers;
 
-use isrba\metronic\Metronic;
 use yii\helpers\Html;
+use isrba\metronic\Metronic;
 
 /**
  * Layout helper
@@ -37,6 +37,10 @@ class Layout {
     private static function _bodyOptions($options)
     {
         Html::addCssClass($options, 'page-sidebar-closed-hide-logo');
+
+        if (isset($_COOKIE['sidebar_closed']) && $_COOKIE['sidebar_closed'] == '1') {
+            Html::addCssClass($options, 'page-sidebar-closed');
+        }
 
         if (Metronic::getComponent() && Metronic::STYLE_MATERIAL === Metronic::getComponent()->style)
         {
