@@ -47,6 +47,10 @@ class Select2 extends InputWidget
      * @var bool indicates whether the select2 is multiple or not.
      */
     public $multiple = false;
+    /**
+     * @var bool indicates whether the select2 allows tagging or not.
+     */
+    public $tags = false;
 
     /**
      * Initializes the widget.
@@ -57,6 +61,9 @@ class Select2 extends InputWidget
         Html::addCssClass($this->options, 'form-control');
         if ($this->multiple) {
             $this->options['multiple'] = 'multiple';
+        }
+        if ($this->tags) {
+            $this->clientOptions['tags'] = 'true';
         }
         if ($this->disabled) {
             $this->options['disabled'] = true;
