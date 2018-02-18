@@ -113,6 +113,17 @@ class Portlet extends Widget
     public $tools = [];
 
     /**
+     * @var array The portlet tabs
+     * Valid values are 'collapse', 'modal', 'reload', 'remove'
+     */
+    public $tabs = [];
+
+    /**
+     * @var boolean whether the labels for tab header items should be HTML-encoded.
+     */
+    public $encodeLabels = true;
+
+    /**
      * @var array Scroller options
      * is an array of the following structure:
      * ```php
@@ -215,6 +226,9 @@ class Portlet extends Widget
     {
         if (false !== $this->title) {
             Html::addCssClass($this->headerOptions, 'portlet-title');
+            if (!empty($this->tabs)) {
+                Html::addCssClass($this->headerOptions, 'tabbable-line');
+            }
 
             echo Html::beginTag('div', $this->headerOptions);
 
@@ -232,11 +246,50 @@ class Portlet extends Widget
 
             echo Html::endTag('div');
 
+            $this->_renderTabs();
+
             $this->_renderTools();
 
             $this->_renderActions();
 
             echo Html::endTag('div');
+        }
+    }
+
+    /**
+     * Renders portlet tabs
+     */
+    private function _renderTabs()
+    {
+        if (!empty($this->tabs)) {
+            $headers = [];
+
+            if (!$this->hasActiveTab() && !empty($this->tabs)) {
+                $this->tabs[0]['active'] = true;
+            }
+
+            foreach ($this->tabs as $n => $tab) {
+                if (!isset($tab['label'])) {
+                    throw new InvalidConfigException("The 'label' option is required.");
+                }
+
+                $label = $this->encodeLabels ? Html::encode($tab['label']) : $tab['label'];
+                $headerOptions = ArrayHelper::getValue($tab, 'headerOptions', []);
+
+                if (isset($tab['active']) && $tab['active']) {
+                    Html::addCssClass($headerOptions, 'active');
+                }
+
+                $options = ArrayHelper::getValue($tab, 'options', ['class' => 'nav nav-tabs']);
+                $options['id'] = ArrayHelper::getValue($options, 'id', $this->options['id'] . '-tab' . $n);
+
+                $header = Html::a($label, '#', ['data-toggle' => 'tab', 'data-target' => '#' . $options['id']]);
+                $headers[] = Html::tag('li', $header, $headerOptions);
+            }
+
+            $headers = Html::tag('ul', implode("\n", $headers), ['class' => 'nav nav-tabs']);
+
+            echo $headers;
         }
     }
 
@@ -348,4 +401,17 @@ class Portlet extends Widget
         return $string;
     }
 
+    /**
+     * @return boolean if there's active tab defined
+     */
+    protected function hasActiveTab()
+    {
+        foreach ($this->tabs as $tab) {
+            if (isset($tab['active']) && $tab['active'] === true) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
