@@ -16,26 +16,16 @@ class Tree extends InputWidget {
      * @var array items to be traversed in tree
      */
     public $items = [];
+	
+	/**
+     * @var string nestable level attr (depth)
+     */
+    public $levelAttr = 'level';
 
     /**
      * @var boolean indicates if is checkable
      */
     public $checkable = false;
-
-    /**
-     * @var array tree options
-     */
-    public $treeOptions = [];
-
-    /**
-     * @var string name of holder where checked items will be stored
-     */
-    public $holder = 'checkableTreeIds';
-
-    /**
-     * @var mixed array when assigned items are loaded, null otherwise
-     */
-    private $_assignedItems = null;
 
     /**
      * @var string item list tag
@@ -46,6 +36,12 @@ class Tree extends InputWidget {
      * @var string item tag
      */
     public $itemTag = 'li';
+	
+	
+	/**
+     * @var string content tag
+     */
+    public $contentTag = '';
 
     /**
      * @var string list class
@@ -58,25 +54,25 @@ class Tree extends InputWidget {
     public $itemClass = 'item';
 
     /**
-     * @var string item icon class
-     */
-    public $itemIconClass = '';
-
-    /**
      * @var string item cotent class
      */
     public $contentClass = '';
 
     /**
-     * @var string nestable level attr (depth)
-     */
-    public $levelAttr = 'level';
-
-    /**
      * @var \Closure callback for generating content
      */
     public $contentCallback;
-
+	
+	/**
+     * @var \Closure callback for generating item options
+     */
+    public $itemOptionsCallback;
+	
+	/**
+     * @var array tree options
+     */
+    public $treeOptions = [];  
+	
     /**
      * @var array default tree config
      */
@@ -85,12 +81,18 @@ class Tree extends InputWidget {
             'wholerow',
         ],
         'core' => [
+			'expand_selected_onload' => false,
             'themes' => [
-                'responsive' => false,
-                'icons' => false
+                'responsive' => true,
+                'icons' => true
             ],
         ],
     ];
+	
+	/**
+     * @var mixed array when assigned items are loaded, null otherwise
+     */
+    private $_assignedItems = null;
 
     /**
      * Inits widget
@@ -108,16 +110,17 @@ class Tree extends InputWidget {
         $builder = \isrba\metronic\builders\TreeBuilder::instance($this->items, array(
                 'treeTag' => $this->listTag,
                 'itemTag' => $this->itemTag,
+                'contentTag' => $this->contentTag,
                 'levelAttr' => $this->levelAttr,
                 'contentCallback' => $this->contentCallback,
-                'treeHtmlOptions' => function() {
+				'treeHtmlOptions' => function() {
                     return $this->getTreeOptions();
                 },
-                'itemHtmlOptions' => function($id) {
-                    return $this->getItemOptions($id);
+                'itemHtmlOptions' => function($model, $level) {
+                    return $this->getItemOptions($model, $level);
                 },
-                'contentHtmlOptions' => function() {
-                    return $this->getContentOptions();
+                'contentHtmlOptions' => function($model, $level) {
+                    return $this->getContentOptions($model, $level);
                 },
         ));
 
@@ -139,22 +142,32 @@ class Tree extends InputWidget {
      * Retrieves item html options
      * @param array $id passed item id
      */
-    protected function getItemOptions($id)
+    protected function getItemOptions($model, $level)
     {
-        return array(
+		if (is_callable($this->itemOptionsCallback)) {
+            $options = (array) call_user_func($this->itemOptionsCallback, $model, $level);
+        } else {
+			$options = [];
+		}
+		
+		$options = ArrayHelper::merge($options, array(
             'class' => $this->itemClass,
-            'data-id' => $id,
-            'data-jstree' => json_encode([
-                'selected' => $this->isItemAssigned($id),
-            ]),
-        );
+            'data-id' => $model->id,
+            'data-jstree' => [
+                'selected' => $this->isItemAssigned($model->id),
+            ],
+        ));
+		
+		$options['data-jstree'] = json_encode($options['data-jstree']);
+		
+        return $options;
     }
 
     /**
      * Retrieves content html options
      * @return type
      */
-    protected function getContentOptions()
+    protected function getContentOptions($model, $level)
     {
         return array(
             'class' => $this->contentClass,
@@ -229,14 +242,17 @@ class Tree extends InputWidget {
         if ($this->checkable)
         {
             $this->defaultTreeOptions = ArrayHelper::merge($this->defaultTreeOptions, [
+                    'core' => [
+                        'dblclick_toggle' => false,
+                    ],
                     'plugins' => [
                         'checkbox'
                     ],
                     'checkbox' => [
                         'keep_selected_style' => false,
-                        'three_state' => false,
-                        'cascade' => ''
-                    ]
+                        'three_state' => true,
+						'cascade_to_disabled' => false,
+                    ],
             ]);
         }
 
@@ -268,16 +284,6 @@ class Tree extends InputWidget {
         $view->registerJs("jQuery('#{$this->id}').on('select_node.jstree', function (e, data) {
             var \$this = $(this);
             \$this.jstree('open_node', data.node);
-            var ParentNode = \$this.jstree('get_parent', data.node);
-            \$this.jstree('select_node', ParentNode);
-        });");
-
-        $view->registerJs("jQuery('#{$this->id}').on('deselect_node.jstree', function (e, data) {
-            var \$this = $(this);
-            \$this.jstree('open_node', data.node);
-            var ChildrenNodes = jQuery.makeArray(\$this.jstree('get_children_dom', data.node));
-            \$this.jstree('deselect_node', ChildrenNodes);
-            \$this.jstree('close_node', data.node);
         });");
     }
 

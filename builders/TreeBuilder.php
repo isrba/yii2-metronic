@@ -13,22 +13,22 @@ class TreeBuilder {
     /**
      * @var string items level attribute
      */
-    public $levelAttr = 'level';
+    public $levelAttr;
 
     /**
      * @var string item tree tag
      */
-    public $treeTag = 'ul';
+    public $treeTag;
 
     /**
      * @var string item tag
      */
-    public $itemTag = 'li';
+    public $itemTag;
 
     /**
      * @var string item tag
      */
-    public $contentTag = '';
+    public $contentTag;
 
     /**
      * @var Closure function generates tree html options
@@ -49,7 +49,7 @@ class TreeBuilder {
      * @var \Closure callback for generating contentF
      */
     public $contentCallback;
-
+	
     /**
      * @var array given items to traverse
      */
@@ -136,18 +136,10 @@ class TreeBuilder {
                 }
             }
 
-            $html .= $this->renderItemOpen($model->primaryKey);
+            $html .= $this->renderItemOpen($model, $level);
 
-            if (is_callable($this->contentCallback))
-            {
-                $html .= $this->renderContent(call_user_func($this->contentCallback, $model, $level));
-            }
-            else
-            {
-                $html .= $this->renderContent($model);
-            }
-
-
+            $html .= $this->renderContent($model, $level);
+			
             $level = $model->{$this->levelAttr};
         }
 
@@ -166,7 +158,11 @@ class TreeBuilder {
      */
     protected function renderTreeOpen()
     {
-        $options = $this->getHtmlOptions($this->treeHtmlOptions);
+        if (is_callable($this->treeHtmlOptions)) {
+            $options = (array) call_user_func($this->treeHtmlOptions);
+        } else {
+			$options = [];
+		}
 
         return Html::beginTag($this->treeTag, $options);
     }
@@ -175,9 +171,13 @@ class TreeBuilder {
      * Renders item open tag
      * @return string html
      */
-    protected function renderItemOpen($id)
+    protected function renderItemOpen($model, $level)
     {
-        $options = $this->getHtmlOptions($this->itemHtmlOptions, $id);
+        if (is_callable($this->itemHtmlOptions)) {
+            $options = (array) call_user_func($this->itemHtmlOptions, $model, $level);
+        } else {
+			$options = [];
+		}
 
         return Html::beginTag($this->itemTag, $options);
     }
@@ -185,12 +185,21 @@ class TreeBuilder {
     /**
      * Renders item content
      */
-    protected function renderContent($content)
+    protected function renderContent($model, $level)
     {
-        if ($this->contentTag)
-        {
-            $options = $this->getHtmlOptions($this->contentHtmlOptions);
-
+        if (is_callable($this->contentCallback)) {
+            $content = call_user_func($this->contentCallback, $model, $level);
+        } else {
+			$content = '';
+		}
+		
+		if ($this->contentTag) {
+            if (is_callable($this->contentHtmlOptions)) {
+				$options = (array) call_user_func($this->contentHtmlOptions, $model, $level);
+			} else {
+				$options = [];
+			}
+			
             return Html::tag($this->contentTag, $options, $content);
         }
 
@@ -213,19 +222,5 @@ class TreeBuilder {
     protected function renderTreeClose()
     {
         return Html::endTag($this->treeTag);
-    }
-
-    /**
-     * Retrieves html options for given property
-     * @return array html options
-     */
-    protected function getHtmlOptions($property, $attr = null)
-    {
-        if (is_callable($property))
-        {
-            return (array) $property->__invoke($attr);
-        }
-
-        return (array) $property;
     }
 }
