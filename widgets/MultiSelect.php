@@ -7,6 +7,7 @@
 namespace isrba\metronic\widgets;
 
 use yii\helpers\Html;
+use yii\web\JsExpression;
 use isrba\metronic\bundles\MultiSelectAsset;
 
 /**
@@ -36,6 +37,8 @@ class MultiSelect extends InputWidget
      * [[\yii\helpers\ArrayHelper::map()]].
      */
     public $data = [];
+	
+	public $searchable = false;
 
     /**
      * Initializes the widget.
@@ -47,6 +50,97 @@ class MultiSelect extends InputWidget
         if ($this->disabled) {
             $this->options['disabled'] = true;
         }
+		
+		if ($this->searchable) {
+			$this->clientOptions['selectableHeader'] = "<input type='text' class='form-control ms-search-input' autocomplete='off' placeholder=''>";
+			$this->clientOptions['selectionHeader'] = "<input type='text' class='form-control ms-search-input' autocomplete='off' placeholder=''>";
+			$this->clientOptions['afterInit'] = new JsExpression('function(ms){
+				var that = this,
+					$selectableSearch = that.$selectableUl.prev(),
+					$selectionSearch = that.$selectionUl.prev(),
+					selectableSearchString = \'#\'+that.$container.attr(\'id\')+\' .ms-elem-selectable:not(.ms-selected)\',
+					selectionSearchString = \'#\'+that.$container.attr(\'id\')+\' .ms-elem-selection.ms-selected\';
+
+				that.qs1 = $selectableSearch.quicksearch(selectableSearchString, {
+					\'show\': function () {
+						$(this).removeClass(\'hidden\');
+						$(this).parent().show();
+					},
+					\'hide\': function () {
+						$(this).addClass(\'hidden\');
+						
+						if ($(this).siblings(\'.ms-elem-selectable:not(.hidden)\').size() == 0) {
+							$(this).parent().hide();
+						}
+					},
+					\'testQuery\': function (query, txt, _row) {
+						for (var i = 0; i < query.length; i += 1) {
+						    if (txt.indexOf(query[i]) === -1 && $(_row).siblings(\'.ms-optgroup-label\').text().indexOf(query[i]) === -1) {
+                                return false;
+                            }
+                        }
+                        return true;
+					},
+				})
+				.on(\'keydown\', function(e){
+				  // down arrow
+				  if (e.which === 40){
+					that.$selectableUl.focus();
+					return false;
+				  }
+				  // escape
+				  if (e.which === 27){
+					$selectableSearch.val(\'\');
+					return false;
+				  }				  
+				});
+
+				that.qs2 = $selectionSearch.quicksearch(selectionSearchString, {
+					\'show\': function () {
+						$(this).removeClass(\'hidden\');
+						$(this).parent().show();
+					},
+					\'hide\': function () {
+						$(this).addClass(\'hidden\');
+						
+						if ($(this).siblings(\'.ms-elem-selection:not(.hidden)\').size() == 0) {
+							$(this).parent().hide();
+						}
+					},
+					\'testQuery\': function (query, txt, _row) {
+						for (var i = 0; i < query.length; i += 1) {
+						    if (txt.indexOf(query[i]) === -1 && $(_row).siblings(\'.ms-optgroup-label\').text().indexOf(query[i]) === -1) {
+                                return false;
+                            }
+                        }
+                        return true;
+					},
+				})
+				.on(\'keydown\', function(e){
+				  // down arrow
+				  if (e.which == 40){
+					that.$selectionUl.focus();
+					return false;
+				  }
+				  // escape
+				  if (e.which === 27){
+					$selectionSearch.val(\'\');
+					return false;
+				  }	
+				});
+			  }');
+			  
+			$this->clientOptions['afterSelect'] = new JsExpression('function(){
+				this.qs1.cache();
+				this.qs2.cache();
+			  }');
+			  
+			$this->clientOptions['afterDeselect'] = new JsExpression('function(){
+				this.qs1.cache();
+				this.qs2.cache();
+			  }');
+		}
+		
         Html::addCssClass($this->options, 'multi-select');
     }
     /**

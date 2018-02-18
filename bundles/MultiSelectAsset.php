@@ -14,6 +14,7 @@ class MultiSelectAsset extends BaseAssetBundle
 
     public $js = [
         'global/plugins/jquery-multi-select/js/jquery.multi-select.js',
+        'custom/plugins/jquery-quicksearch/js/jquery-quicksearch.js',
     ];
 
     public $css = [
