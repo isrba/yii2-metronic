@@ -50,7 +50,7 @@ class TimePicker extends InputWidget {
     public function init()
     {
         parent::init();
-        Html::addCssClass($this->options, 'form-control');
+        Html::addCssClass($this->options, 'timepicker form-control');
     }
 
     /**
