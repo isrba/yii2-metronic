@@ -9,6 +9,7 @@ namespace isrba\metronic\widgets;
 
 use isrba\metronic\Metronic;
 use yii\base\InvalidConfigException;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
@@ -105,6 +106,16 @@ class Portlet extends Widget
      * @var array List of actions, where each element must be specified as a string.
      */
     public $actions = [];
+
+    /**
+     * @var array List of inputs, where each element must be specified as a closure.
+     */
+    public $inputs = [];
+
+    /**
+     * @var ActiveRecord model used to generate inputs.
+     */
+    public $model;
 
     /**
      * @var array The portlet tools
@@ -250,6 +261,8 @@ class Portlet extends Widget
 
             $this->_renderTools();
 
+            $this->_renderInputs();
+
             $this->_renderActions();
 
             echo Html::endTag('div');
@@ -334,6 +347,32 @@ class Portlet extends Widget
         if (!empty($this->actions)) {
             echo Html::tag('div', implode("\n", $this->actions), ['class' => 'actions']);
         }
+    }
+
+    /**
+     * Renders portlet inputs
+     */
+    private function _renderInputs()
+    {
+        echo Html::beginTag('div', ['class' => 'inputs']);
+
+        $form = ActiveForm::begin([
+            'layout' => 'inline',
+            'action' => [\Yii::$app->controller->id . '/' .  \Yii::$app->controller->action->id],
+            'buttons' => [],
+        ]);
+
+        foreach ($this->inputs as $index => $input) {
+            $this->inputs[$index] = call_user_func($input, $form, $this->model);
+        }
+
+        if (!empty($this->inputs)) {
+            echo implode("\n", $this->inputs);
+        }
+
+        ActiveForm::end();
+
+        echo Html::endTag('div');
     }
 
     /**
