@@ -291,6 +291,18 @@ class ActiveField extends \yii\bootstrap\ActiveField {
     }
 
     /**
+     * Generates dateTimePicker component [[DateTimePicker]].
+     * @param array $options dateTimePicker options
+     * @return $this
+     */
+    public function dateTimePicker($options = [])
+    {
+        $this->parts['{input}'] = DateTimePicker::widget(array_merge($options, ['model' => $this->model, 'attribute' => $this->attribute]));
+
+        return $this;
+    }
+
+    /**
      * Generates timePicker component [[TimePicker]].
      * @param array $options timePicker options
      * @return $this
