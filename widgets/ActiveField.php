@@ -235,16 +235,20 @@ class ActiveField extends \yii\bootstrap\ActiveField {
      * @return $this
      */
     public function radioList($items, $options = []) {
+        $itemOptions = isset($options['itemOptions']) ? $options['itemOptions'] : [];
+
         $options = array_merge_recursive($options, [
             'class' => 'mt-radio-list',
-            'item' => function ($index, $label, $name, $checked, $value) {
-                return Html::radio($name, $checked, [
+            'item' => function ($index, $label, $name, $checked, $value) use ($itemOptions) {
+                $options = array_merge([
+                    'label' => $label . '<span></span>',
+                    'value' => $value,
                     'labelOptions' => [
                         'class' => 'mt-radio mt-radio-outline'
                     ],
-                    'value' => $value,
-                    'label' => $label . '<span></span>',
-                ]);
+                ], $itemOptions);
+
+                return Html::radio($name, $checked, $options);
             },
         ]);
 
