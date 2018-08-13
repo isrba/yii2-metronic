@@ -83,16 +83,18 @@ class DateTimePicker extends InputWidget {
      */
     public function run()
     {
-        $contents = [];
+		$contents = [];
         if ($this->inline)
         {
             if ($this->hasModel())
             {
-                $contents[] = Html::activeHiddenInput($this->model, $this->attribute, $this->options);
+                $this->model->{$this->attribute} = \Yii::$app->formatter->asDate($this->model->{$this->attribute}) . ' ' . \Yii::$app->formatter->asTime($this->model->{$this->attribute}, 'short');
+				$contents[] = Html::activeHiddenInput($this->model, $this->attribute, $this->options);
             }
             else
             {
-                $contents[] = Html::hiddenInput($this->name, $this->value, $this->options);
+                $this->value = \Yii::$app->formatter->asDate($this->value) . ' ' . \Yii::$app->formatter->asTime($this->value, 'php:H:i');
+				$contents[] = Html::hiddenInput($this->name, $this->value, $this->options);
             }
             $contents[] = Html::tag('div', '', $this->containerOptions);
         }
@@ -100,14 +102,16 @@ class DateTimePicker extends InputWidget {
         {
             if ($this->hasModel())
             {
-                $contents[] = Html::activeTextInput($this->model, $this->attribute, $this->options);
+                $this->model->{$this->attribute} = \Yii::$app->formatter->asDate($this->model->{$this->attribute}) . ' ' . \Yii::$app->formatter->asTime($this->model->{$this->attribute}, 'short');
+				$contents[] = Html::activeTextInput($this->model, $this->attribute, $this->options);
             }
             else
             {
-                $contents[] = Html::textInput($this->name, $this->value, $this->options);
+                $this->value = \Yii::$app->formatter->asDate($this->value) . ' ' . \Yii::$app->formatter->asTime($this->value, 'php:H:i');
+				$contents[] = Html::textInput($this->name, $this->value, $this->options);
             }
         }
-        echo implode("\n", $contents);
+		echo implode("\n", $contents);
         if ($this->language)
         {
             $this->clientOptions['language'] = $this->language;
