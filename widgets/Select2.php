@@ -6,8 +6,10 @@
 
 namespace isrba\metronic\widgets;
 
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 
 use isrba\metronic\bundles\Select2Asset;
 
@@ -67,6 +69,18 @@ class Select2 extends InputWidget
         }
         if ($this->disabled) {
             $this->options['disabled'] = true;
+        }
+
+        if (!$this->multiple && isset($this->clientOptions['placeholder']) && !isset($this->data[''])) {
+            $this->data = ['' => ''] + $this->data;
+        }
+
+        if (isset($this->clientOptions['ajax']) && empty($this->data)) {
+            $value = ArrayHelper::getValue($this->model, $this->attribute);
+
+            if (!empty($value) && is_array($value)) {
+                $this->data = array_combine($value, $value);
+            }
         }
     }
 

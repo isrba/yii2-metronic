@@ -240,6 +240,10 @@ class ActiveField extends \yii\bootstrap\ActiveField {
         $options = array_merge_recursive($options, [
             'class' => 'mt-radio-list',
             'item' => function ($index, $label, $name, $checked, $value) use ($itemOptions) {
+                if (preg_match('/^divider/', $value)) {
+                    return '<h5>' . $label . '</h5>';
+                }
+
                 $options = array_merge([
                     'label' => $label . '<span></span>',
                     'value' => $value,
@@ -337,11 +341,19 @@ class ActiveField extends \yii\bootstrap\ActiveField {
      */
     public function select2($options = [])
     {
-        if (!isset($options['multiple']) || !$options['multiple']) {
-            $options['data'] = ['' => ''] + $options['data'];
-        }
-
         $this->parts['{input}'] = Select2::widget(array_merge($options, ['model' => $this->model, 'attribute' => $this->attribute]));
+
+        return $this;
+    }
+
+    /**
+     * Generates Typeahead AutoComplete component [[Typeahead]].
+     * @param array $options select2 options
+     * @return $this
+     */
+    public function typeahead($options = [])
+    {
+        Typeahead::widget(array_merge($options, ['model' => $this->model, 'attribute' => $this->attribute]));
 
         return $this;
     }
