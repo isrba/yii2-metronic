@@ -7,6 +7,8 @@
 
 namespace isrba\metronic\bundles;
 
+use Yii;
+
 class DatePickerAsset extends BaseAssetBundle {
 
     public $js = [
@@ -20,4 +22,14 @@ class DatePickerAsset extends BaseAssetBundle {
     public $depends = [
         'isrba\metronic\bundles\CoreAsset',
     ];
+	
+	/**
+     * Inits bundle
+     */
+    public function init()
+    {
+        $this->js[] = 'global/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.' . preg_replace('/\-.*$/', '', Yii::$app->language) . '.min.js';
+
+        parent::init();
+    }
 }
