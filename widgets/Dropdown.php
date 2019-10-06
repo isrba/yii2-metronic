@@ -109,19 +109,23 @@ class Dropdown extends \yii\bootstrap\Dropdown {
         $lines = [];
         if ($this->title)
         {
-            $lines[] = Html::tag('li', Html::tag('p', $this->title));
-        }
+            $title = Html::tag('h3', $this->title);
 
-        if (!empty($this->more))
-        {
-            $url = ArrayHelper::getValue($this->more, 'url', '#');
-            $text = ArrayHelper::getValue($this->more, 'label', '');
-            $icon = ArrayHelper::getValue($this->more, 'icon', '');
-            if ($icon)
+            if (!empty($this->more))
             {
-                $icon = Html::tag('i', '', ['class' => $icon]);
+                $icon = ArrayHelper::getValue($this->more, 'icon', '');
+                $label = ArrayHelper::getValue($this->more, 'label', '');
+                $url = ArrayHelper::getValue($this->more, 'url', '#');
+                if ($icon)
+                {
+                    $icon = Html::tag('i', '', ['class' => $icon]);
+                }
+                $more = Html::tag('a',  $icon . ' ' . $label, ['href' => $url]);
+            } else {
+                $more = '';
             }
-            $lines[] = Html::tag('li', Html::tag('h3', $text) . Html::tag('a',  $icon, ['href' => $url]), ['class' => 'external']);
+
+            $lines[] = Html::tag('li', $title . ' ' . $more, ['class' => 'external']);
         }
 
         if (!empty($this->scroller))

@@ -213,7 +213,7 @@ class ActiveField extends \yii\bootstrap\ActiveField {
                         'class' => 'mt-checkbox mt-checkbox-outline'
                     ],
                     'value' => $value,
-                    'label' => $label . '<span></span>',
+                    'label' => $label,
                 ]);
             },
         ]);
@@ -245,7 +245,7 @@ class ActiveField extends \yii\bootstrap\ActiveField {
                 }
 
                 $options = array_merge([
-                    'label' => $label . '<span></span>',
+                    'label' => $label,
                     'value' => $value,
                     'labelOptions' => [
                         'class' => 'mt-radio mt-radio-outline'
@@ -262,6 +262,7 @@ class ActiveField extends \yii\bootstrap\ActiveField {
 
         parent::radioList($items, $options);
 
+        $this->parts['{input}'] = preg_replace('/<\/label>/', '<span></span></label>',  $this->parts['{input}']);
         return $this;
     }
 

@@ -76,7 +76,7 @@ class Select2 extends InputWidget
         }
 
         if (isset($this->clientOptions['ajax']) && empty($this->data)) {
-            $value = ArrayHelper::getValue($this->model, $this->attribute);
+            $value = $this->model->{$this->attribute};
 
             if (!empty($value) && is_array($value)) {
                 $this->data = array_combine($value, $value);
