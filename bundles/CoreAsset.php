@@ -52,6 +52,7 @@ class CoreAsset extends BaseAssetBundle {
         'global/plugins/js.cookie.min.js',
         'global/plugins/jquery-cookiebar/jquery.cookieBar.min.js',
         'global/scripts/app.js',
+		'global/plugins/moment.min.js',
         'custom/plugins/jquery-pietimer/scripts/jquery.pietimer.js',
     ];
 }
