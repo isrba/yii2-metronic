@@ -89,10 +89,12 @@ class DatePicker extends InputWidget {
         {
             if ($this->hasModel())
             {
+                $this->model->{$this->attribute} = \Yii::$app->formatter->asDate($this->model->{$this->attribute});
                 $contents[] = Html::activeHiddenInput($this->model, $this->attribute, $this->options);
             }
             else
             {
+                $this->value = \Yii::$app->formatter->asDate($this->value);
                 $contents[] = Html::hiddenInput($this->name, $this->value, $this->options);
             }
             $contents[] = Html::tag('div', '', $this->containerOptions);
@@ -101,10 +103,12 @@ class DatePicker extends InputWidget {
         {
             if ($this->hasModel())
             {
+                $this->model->{$this->attribute} = \Yii::$app->formatter->asDate($this->model->{$this->attribute});
                 $contents[] = Html::activeTextInput($this->model, $this->attribute, $this->options);
             }
             else
             {
+                $this->value = \Yii::$app->formatter->asDate($this->value);
                 $contents[] = Html::textInput($this->name, $this->value, $this->options);
             }
         }

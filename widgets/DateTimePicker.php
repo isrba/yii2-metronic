@@ -88,7 +88,7 @@ class DateTimePicker extends InputWidget {
         {
             if ($this->hasModel())
             {
-                $this->model->{$this->attribute} = \Yii::$app->formatter->asDate($this->model->{$this->attribute}) . ' ' . \Yii::$app->formatter->asTime($this->model->{$this->attribute}, 'short');
+                $this->model->{$this->attribute} = \Yii::$app->formatter->asDate($this->model->{$this->attribute}) . ' ' . \Yii::$app->formatter->asTime($this->model->{$this->attribute}, 'php:H:i');
 				$contents[] = Html::activeHiddenInput($this->model, $this->attribute, $this->options);
             }
             else
@@ -102,7 +102,7 @@ class DateTimePicker extends InputWidget {
         {
             if ($this->hasModel())
             {
-                $this->model->{$this->attribute} = \Yii::$app->formatter->asDate($this->model->{$this->attribute}) . ' ' . \Yii::$app->formatter->asTime($this->model->{$this->attribute}, 'short');
+                $this->model->{$this->attribute} = \Yii::$app->formatter->asDate($this->model->{$this->attribute}) . ' ' . \Yii::$app->formatter->asTime($this->model->{$this->attribute}, 'php:H:i');
 				$contents[] = Html::activeTextInput($this->model, $this->attribute, $this->options);
             }
             else
